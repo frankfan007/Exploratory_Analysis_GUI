@@ -22,7 +22,7 @@ function varargout = Exploratory_Data_Analysis_GUI_v03(varargin)
 
 % Edit the above text to modify the response to help Exploratory_Data_Analysis_GUI_v03
 
-% Last Modified by GUIDE v2.5 01-Sep-2017 15:29:22
+% Last Modified by GUIDE v2.5 11-Oct-2017 13:12:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1273,3 +1273,48 @@ function Max_Slider_Text_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Max_Slider_Text (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes on selection change in MarkerSize.
+function MarkerSize_Callback(hObject, eventdata, handles)
+% hObject    handle to MarkerSize (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns MarkerSize contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from MarkerSize
+
+contents =  cellstr(get(hObject,'String'));
+c1=contents{get(hObject,'Value')};
+
+UserData = get(handles.output,'UserData');
+
+if strcmp(c1,'Tiny')
+     MarkerSize = 4;    
+elseif strcmp(c1,'Small')
+     MarkerSize = 6;
+elseif strcmp(c1,'Medium')
+     MarkerSize = 8;
+elseif strcmp(c1,'Large')
+     MarkerSize = 14;
+elseif strcmp(c1,'Huge')
+     MarkerSize = 24;
+end
+UserData.MarkerSize = MarkerSize;
+set(handles.output,'UserData',UserData);
+zoom_obj = zoom(handles.ColorMapFig);
+set(zoom_obj,'ActionPostCallback',{@zoomUpdateFcn,handles})
+dcm_obj = datacursormode(gcf);
+set(dcm_obj,'UpdateFcn',{@myupdatefcn,handles});
+
+% --- Executes during object creation, after setting all properties.
+function MarkerSize_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to MarkerSize (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
